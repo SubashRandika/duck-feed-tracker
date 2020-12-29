@@ -1,0 +1,38 @@
+{
+	"appenders": {
+		"request": {
+			"type": "dateFile",
+			"filename": "log/request.log",
+			"pattern": "-yyyy-MM-dd",
+			"category": "http"
+		},
+		"server": {
+			"type": "file",
+			"filename": "log/server.log",
+			"maxLogSize": 20971520,
+			"numBackups": 3,
+			"flag": "w",
+			"pattern": "%d %p %c %x{user} %m%n"
+		},
+		"errorFile": {
+			"type": "file",
+			"filename": "log/errors.log"
+		},
+		"errors": {
+			"type": "logLevelFilter",
+			"level": "ERROR",
+			"appender": "errorFile"
+		},
+		"console": {
+			"type": "console",
+			"category": "console"
+		}
+	},
+	"categories": {
+		"default": {
+			"appenders": ["server", "console", "errors"],
+			"level": "DEBUG"
+		},
+		"http": { "appenders": ["request"], "level": "DEBUG" }
+	}
+}
