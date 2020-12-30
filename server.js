@@ -1,7 +1,9 @@
-require('dotenv').config();
 const log4js = require('log4js');
 const express = require('express');
-const mongoose = require('mongoose');
+const { connect } = require('mongoose');
+
+// import application constants
+const { PORT, DB_URI } = require('./config');
 
 // create the logger
 const log = log4js.getLogger('default');
@@ -14,35 +16,36 @@ const app = express();
 app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
 
 // use express url-encoder to parse urlencoded request body
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 // use express json parser to parse json request payload
 app.use(express.json());
 
-// get db connection string from environment config
-const mongodbURI = process.env.MONGO_ATLAS_URI;
+// application bootstrap function
+const startApplication = async () => {
+	try {
+		// connect to mongodb database (mongo atlas)
+		await connect(DB_URI, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useFindAndModify: true
+		});
 
-// connect to mongodb database (mongo atlas)
-mongoose.connect(mongodbURI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useFindAndModify: false,
-	useCreateIndex: true
-});
+		log.info(
+			'Successfully connected to the database',
+			DB_URI.replace(/\/\/.*@/, '//*****:*****@')
+		);
 
-// event handler when successfully established connection to the mongodb
-mongoose.connection.on('connected', () => {
-	log.info('MongoDB connection successfully established');
+		// express server runs on port 5000 after successful connection to the DB
+		app.listen(PORT, () => {
+			log.info('Server started on port', PORT);
+		});
+	} catch (err) {
+		// terminate application startup, if an error occurs on a connection to the mongodb
+		log.error('Unable to connect to Mongo database', err);
+		setTimeout(() => {
+			process.exit(1);
+		}, 3000);
+	}
+};
 
-	// use env variables port if not default 5000
-	const port = process.env.PORT || 5000;
-
-	// running express server after successfully established db connection
-	app.listen(port, () => {
-		log.info('Server is listening on port: ', port);
-	});
-});
-
-// event handler if an error occurs on a connection to the mongodb
-mongoose.connection.on('error', (err) => {
-	log.error('Unable to connect to Mongo database', err);
-});
+startApplication();
