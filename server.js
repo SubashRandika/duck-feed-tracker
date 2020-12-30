@@ -5,21 +5,13 @@ const { connect } = require('mongoose');
 const { PORT, DB_URI } = require('./config');
 // import application routes
 const users = require('./routes/api/users');
-
-// configure log4js for app server startup
-log4js.configure('./config/log4js.json');
-// create env specific loggers (production/development)
-let log =
-	process.env.NODE_ENV === 'production'
-		? log4js.getLogger('default')
-		: log4js.getLogger('console');
-// configure log level externally
-log.level = process.env.LOG_LEVEL;
+// import logging setup
+const { log, connectLogger } = require('./utils/Logger');
 
 const app = express();
 
 // logging setup for http calls with express using connect-logger
-app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
+app.use(connectLogger);
 
 // use express url-encoder to parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
