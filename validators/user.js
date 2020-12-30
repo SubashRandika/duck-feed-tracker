@@ -14,27 +14,47 @@ const checkEmailTaken = async (email) => {
 };
 
 // check whether new user details of req payload align with data model
-const validate = (userDetails) => {
-	const schema = {
-		name: Joi.string().trim().required().min(5).max(30),
-		email: Joi.string().trim().email().required(),
+const validateUser = async (userDetails) => {
+	const schema = Joi.object({
+		name: Joi.string().trim().required().min(5).max(30).messages({
+			'string.empty': 'name field cannot be empty',
+			'string.min': 'name field should have a minimum length of {#limit}',
+			'string.max': 'name field should have a maximum length of {#limit}',
+			'any.required': 'name field is required'
+		}),
+		email: Joi.string().trim().email().required().messages({
+			'string.empty': 'email field cannot be empty',
+			'string.email': 'email address is not valid',
+			'any.required': 'email field is required'
+		}),
 		role: Joi.string().valid('user', 'admin'),
-		username: Joi.string().trim().required().min(5).max(15),
+		username: Joi.string().trim().required().min(5).max(15).messages({
+			'string.empty': 'username field cannot be empty',
+			'string.min': 'username field should have a minimum length of {#limit}',
+			'string.max': 'username field should have a maximum length of {#limit}',
+			'any.required': 'username field is required'
+		}),
 		password: Joi.string()
 			.trim()
 			.required()
 			.pattern(
 				new RegExp(
-					'^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*s).{8,15}$'
+					'^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*s).{7,15}$'
 				)
 			)
-	};
+			.messages({
+				'string.empty': 'password field cannot be empty',
+				'string.pattern.base':
+					'password length should be among 8 - 15 characters, including lowercase, uppercase, numbers and special characters',
+				'any.required': 'password field is required'
+			})
+	});
 
-	return Joi.validate(userDetails, schema);
+	return schema.validate(userDetails);
 };
 
 module.exports = {
-	validate,
+	validateUser,
 	checkUsernameTaken,
 	checkEmailTaken
 };

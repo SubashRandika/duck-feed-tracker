@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const {
-	validate,
+	validateUser,
 	checkUsernameTaken,
 	checkEmailTaken
 } = require('../validators/user');
@@ -10,17 +10,17 @@ const { log } = require('../utils/Logger');
 // register the user (USER, ADMIN)
 const registerUser = async (userDetails, role, res) => {
 	try {
-		const { error } = validate(userDetails);
+		const { error } = await validateUser(userDetails);
 
 		if (error) {
-			log.warn('Invalid user details provided', error);
+			log.warn('Invalid user details provided', error.details[0].message);
 
 			return res
 				.status(400)
 				.send({ success: false, message: error.details[0].message });
 		}
 
-		const isUsernameExists = checkUsernameTaken(userDetails.username);
+		const isUsernameExists = await checkUsernameTaken(userDetails.username);
 
 		if (isUsernameExists) {
 			log.warn('You trying to create user with existing username');
@@ -30,7 +30,7 @@ const registerUser = async (userDetails, role, res) => {
 				.send({ success: false, message: 'Username is already taken' });
 		}
 
-		const isEmailExists = checkEmailTaken(userDetails.email);
+		const isEmailExists = await checkEmailTaken(userDetails.email);
 
 		if (isEmailExists) {
 			log.warn('You trying to register with existing email');
