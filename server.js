@@ -1,7 +1,6 @@
 require('dotenv').config();
 const log4js = require('log4js');
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // create the logger
@@ -14,10 +13,10 @@ const app = express();
 // logging setup for http calls with express using connect-logger
 app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
 
-// use body parser middleware to parse urlencoded request body
-app.use(bodyParser.urlencoded({ extended: false }));
-// use body parser middleware to parse json request payload
-app.use(bodyParser.json());
+// use express url-encoder to parse urlencoded request body
+app.use(express.urlencoded());
+// use express json parser to parse json request payload
+app.use(express.json());
 
 // get db connection string from environment config
 const mongodbURI = process.env.MONGO_ATLAS_URI;
