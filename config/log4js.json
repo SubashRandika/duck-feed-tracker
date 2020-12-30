@@ -33,6 +33,7 @@
 			"appenders": ["server", "console", "errors"],
 			"level": "DEBUG"
 		},
+		"console": { "appenders": ["console"], "level": "DEBUG" },
 		"http": { "appenders": ["request"], "level": "DEBUG" }
 	}
 }
