@@ -2,7 +2,8 @@ const router = require('express').Router();
 const {
 	registerUser,
 	loginUser,
-	authenticateUser
+	authenticateUser,
+	extractUserInfo
 } = require('../../utils/Auth');
 
 // normal user registration route
@@ -27,7 +28,7 @@ router.post('/login-admin', async (req, res) => {
 
 // get any kind of user profile route
 router.get('/profile', authenticateUser, async (req, res) => {
-	return res.json('Welcome to your profile');
+	return res.status(200).json(extractUserInfo(req.user));
 });
 
 module.exports = router;

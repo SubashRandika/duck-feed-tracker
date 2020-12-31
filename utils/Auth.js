@@ -156,8 +156,19 @@ const loginUser = async (userCredentials, role, res) => {
 // passport authentication middleware with jwt strategy for secure routes
 const authenticateUser = passport.authenticate('jwt', { session: false });
 
+// user details serialization method
+const extractUserInfo = (user) => ({
+	id: user.id,
+	name: user.name,
+	username: user.username,
+	email: user.email,
+	createdAt: user.createdAt,
+	updatedAt: user.updatedAt
+});
+
 module.exports = {
 	registerUser,
 	loginUser,
-	authenticateUser
+	authenticateUser,
+	extractUserInfo
 };
