@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const User = require('../models/User');
 const {
 	validateUser,
@@ -8,11 +7,11 @@ const {
 	checkUsernameTaken,
 	checkEmailTaken
 } = require('../validators/user');
-const { log } = require('../utils/Logger');
-const { SECRET } = require('../config');
+const { log } = require('../../utils/Logger');
+const { SECRET } = require('../../config');
 
-// register the user (USER, ADMIN)
-const registerUser = async (userDetails, role, res) => {
+// new user registration controller
+exports.registerUser = async (userDetails, role, res) => {
 	try {
 		const { error } = await validateUser(userDetails);
 
@@ -72,8 +71,8 @@ const registerUser = async (userDetails, role, res) => {
 	}
 };
 
-// login the user (USER, ADMIN)
-const loginUser = async (userCredentials, role, res) => {
+// user login controller
+exports.loginUser = async (userCredentials, role, res) => {
 	try {
 		const { error } = await validateUserCredentials(userCredentials);
 
@@ -151,24 +150,4 @@ const loginUser = async (userCredentials, role, res) => {
 			message: `Unable to signin to your account.`
 		});
 	}
-};
-
-// passport authentication middleware with jwt strategy for secure routes
-const authenticateUser = passport.authenticate('jwt', { session: false });
-
-// user details serialization method
-const extractUserInfo = (user) => ({
-	id: user.id,
-	name: user.name,
-	username: user.username,
-	email: user.email,
-	createdAt: user.createdAt,
-	updatedAt: user.updatedAt
-});
-
-module.exports = {
-	registerUser,
-	loginUser,
-	authenticateUser,
-	extractUserInfo
 };

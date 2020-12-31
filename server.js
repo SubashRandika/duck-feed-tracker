@@ -4,7 +4,7 @@ const { connect } = require('mongoose');
 // import application constants
 const { PORT, DB_URI } = require('./config');
 // import application routes
-const users = require('./routes/api/users');
+const users = require('./api/routes/users');
 // import logging setup
 const { log, connectLogger } = require('./utils/Logger');
 
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(passport.initialize());
 
 // import passport-jwt middleware and use it with passport
-require('./middleware/passport')(passport);
+require('./api/middleware/passport')(passport);
 
 // application routing middleware (api endpoints)
 app.use('/api/users', users);
