@@ -1,4 +1,5 @@
 const log4js = require('log4js');
+const { LOG_LEVEL } = require('../config');
 
 // configure log4js for app server startup
 log4js.configure('./config/log4js.json');
@@ -10,7 +11,7 @@ let log =
 		: log4js.getLogger('console');
 
 // configure log level externally
-log.level = process.env.LOG_LEVEL;
+log.level = LOG_LEVEL;
 
 // http call logging using connect-logger (alternative way for morgan setup)
 const connectLogger = log4js.connectLogger(log4js.getLogger('http'), {

@@ -59,8 +59,25 @@ const validateUser = async (userDetails) => {
 	return schema.validate(userDetails);
 };
 
+// check whether user credentials are valid
+const validateUserCredentials = async (userCredentials) => {
+	const schema = Joi.object({
+		username: Joi.string().required().messages({
+			'string.empty': 'username field cannot be empty',
+			'any.required': 'username field is required'
+		}),
+		password: Joi.string().required().messages({
+			'string.empty': 'password field cannot be empty',
+			'any.required': 'password field is required'
+		})
+	});
+
+	return schema.validate(userCredentials);
+};
+
 module.exports = {
 	validateUser,
+	validateUserCredentials,
 	checkUsernameTaken,
 	checkEmailTaken
 };

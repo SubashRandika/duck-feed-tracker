@@ -1,11 +1,14 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const {
 	validateUser,
+	validateUserCredentials,
 	checkUsernameTaken,
 	checkEmailTaken
 } = require('../validators/user');
 const { log } = require('../utils/Logger');
+const { SECRET } = require('../config');
 
 // register the user (USER, ADMIN)
 const registerUser = async (userDetails, role, res) => {
@@ -17,7 +20,7 @@ const registerUser = async (userDetails, role, res) => {
 
 			return res
 				.status(400)
-				.send({ success: false, message: error.details[0].message });
+				.json({ success: false, message: error.details[0].message });
 		}
 
 		const isUsernameExists = await checkUsernameTaken(userDetails.username);
@@ -27,7 +30,7 @@ const registerUser = async (userDetails, role, res) => {
 
 			return res
 				.status(400)
-				.send({ success: false, message: 'Username is already taken' });
+				.json({ success: false, message: 'Username is already taken' });
 		}
 
 		const isEmailExists = await checkEmailTaken(userDetails.email);
@@ -37,7 +40,7 @@ const registerUser = async (userDetails, role, res) => {
 
 			return res
 				.status(400)
-				.send({ success: false, message: 'Email is already registered' });
+				.json({ success: false, message: 'Email is already registered' });
 		}
 
 		// get the hashed password from text password
@@ -54,20 +57,102 @@ const registerUser = async (userDetails, role, res) => {
 
 		log.debug('Successfully created a new user', userDetails.name);
 
-		return res.status(201).send({
+		return res.status(201).json({
 			success: true,
 			message: 'You have been successfully registered. Please try to login now'
 		});
 	} catch (err) {
 		log.error('User account creation failed', err);
 
-		return res.status(500).send({
+		return res.status(500).json({
 			success: false,
 			message: `Unable to create your account.`
 		});
 	}
 };
 
+// login the user (USER, ADMIN)
+const loginUser = async (userCredentials, role, res) => {
+	try {
+		const { error } = await validateUserCredentials(userCredentials);
+
+		if (error) {
+			log.warn('Invalid user credentials provided', error.details[0].message);
+
+			return res
+				.status(400)
+				.json({ success: false, message: error.details[0].message });
+		}
+
+		const { username, password } = userCredentials;
+
+		// check whether user already exists in the DB
+		const user = await User.findOne({ username });
+
+		if (!user) {
+			log.warn('Username not found. Invalid login credentials');
+
+			res.status(404).json({
+				success: false,
+				message:
+					'Username not found. Please check your credentials and try again.'
+			});
+		}
+
+		// check whether signin user has correct role
+		if (user.role !== role) {
+			log.warn('Signin user has invalid role ', role);
+
+			res.status(403).json({
+				success: false,
+				message: 'Please make sure you are authorized to signin'
+			});
+		}
+
+		// check the hashed password match with signin user password
+		const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+		if (isPasswordMatched) {
+			const { id, username, email, role, name } = user;
+
+			// if password is matched successfully, generate token for the user
+			const jwtPayload = {
+				id,
+				username,
+				email,
+				role,
+				name
+			};
+
+			// synchronous sign user jwt token
+			const token = jwt.sign(jwtPayload, SECRET, { expiresIn: '2h' });
+
+			log.debug('Successfully signin to the application');
+
+			return res.status(200).json({
+				success: true,
+				token: `Bearer ${token}`,
+				expiresIn: '2h'
+			});
+		} else {
+			log.warn('Provided password is incorrect. Please check and try again');
+
+			return res.status(403).json({
+				success: false,
+				message: 'Incorrect password. Please check and try again'
+			});
+		}
+	} catch (err) {
+		log.error('User signin failed', err);
+
+		return res.status(500).json({
+			success: false,
+			message: `Unable to signin to your account.`
+		});
+	}
+};
+
 module.exports = {
-	registerUser
+	registerUser,
+	loginUser
 };
