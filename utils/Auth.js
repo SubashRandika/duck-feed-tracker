@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const User = require('../models/User');
 const {
 	validateUser,
@@ -152,7 +153,11 @@ const loginUser = async (userCredentials, role, res) => {
 	}
 };
 
+// passport authentication middleware with jwt strategy for secure routes
+const authenticateUser = passport.authenticate('jwt', { session: false });
+
 module.exports = {
 	registerUser,
-	loginUser
+	loginUser,
+	authenticateUser
 };

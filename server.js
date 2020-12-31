@@ -1,5 +1,5 @@
-const log4js = require('log4js');
 const express = require('express');
+const passport = require('passport');
 const { connect } = require('mongoose');
 // import application constants
 const { PORT, DB_URI } = require('./config');
@@ -17,6 +17,11 @@ app.use(connectLogger);
 app.use(express.urlencoded({ extended: true }));
 // use express json parser to parse json request payload
 app.use(express.json());
+// initialization and use of passport middleware
+app.use(passport.initialize());
+
+// import passport-jwt middleware and use it with passport
+require('./middleware/passport')(passport);
 
 // application routing middleware (api endpoints)
 app.use('/api/users', users);
