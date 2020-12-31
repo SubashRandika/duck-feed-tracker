@@ -10,7 +10,17 @@ const checkUsernameTaken = async (username) => {
 // check whether user already registered with the email
 const checkEmailTaken = async (email) => {
 	const user = await User.findOne({ email });
-	return user ? false : true;
+	return user ? true : false;
+};
+
+// custom password strength validator with joi
+const passwordValidator = (value, helpers) => {
+	const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
+	if (!value.match(passwordRegex)) {
+		return helpers.error('any.invalid');
+	}
+
+	return value;
 };
 
 // check whether new user details of req payload align with data model
@@ -37,15 +47,11 @@ const validateUser = async (userDetails) => {
 		password: Joi.string()
 			.trim()
 			.required()
-			.pattern(
-				new RegExp(
-					'^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*s).{7,15}$'
-				)
-			)
+			.custom(passwordValidator, 'password')
 			.messages({
 				'string.empty': 'password field cannot be empty',
-				'string.pattern.base':
-					'password length should be among 8 - 15 characters, including lowercase, uppercase, numbers and special characters',
+				'any.invalid':
+					'password should be at least 8 characters long. must contain at least 1 lowercase, uppercase, number and special characters',
 				'any.required': 'password field is required'
 			})
 	});
