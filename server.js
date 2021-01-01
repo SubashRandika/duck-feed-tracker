@@ -5,6 +5,7 @@ const { connect } = require('mongoose');
 const { PORT, DB_URI } = require('./config');
 // import application routes
 const users = require('./api/routes/users');
+const feeds = require('./api/routes/feeds');
 // import logging setup
 const { log, connectLogger } = require('./utils/Logger');
 
@@ -25,6 +26,7 @@ require('./api/middleware/passport')(passport);
 
 // application routing middleware (api endpoints)
 app.use('/api/users', users);
+app.use('/api/feeds', feeds);
 
 // application bootstrap function
 const startApplication = async () => {

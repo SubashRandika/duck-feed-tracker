@@ -4,8 +4,12 @@ const FeedSchema = new Schema(
 	{
 		dateTime: { type: Date, default: Date.now },
 		foodName: { type: String, required: true },
-		foodCategory: { type: Schema.Types.ObjectId, ref: 'categories' },
-		foodQuantity: { type: Number, required: true },
+		foodCategory: {
+			type: Schema.Types.ObjectId,
+			ref: 'categories',
+			required: true
+		},
+		foodQuantity: { type: Number, default: 0 },
 		location: {
 			address: { type: String, required: true },
 			city: { type: String, required: true },
@@ -14,9 +18,9 @@ const FeedSchema = new Schema(
 			longitude: { type: Number, required: true },
 			latitude: { type: Number, required: true }
 		},
-		duckCount: { type: Number, required: true },
-		isScheduled: { type: Boolean },
-		user: { type: Schema.Types.ObjectId, ref: 'users' }
+		duckCount: { type: Number, default: 0 },
+		isScheduled: { type: Boolean, default: false },
+		user: { type: Schema.Types.ObjectId, ref: 'users', required: true }
 	},
 	{ timestamps: true }
 );
