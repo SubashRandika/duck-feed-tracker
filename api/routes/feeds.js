@@ -13,13 +13,23 @@ router.get(
 	}
 );
 
-// create a new duck feed entry
+// create a new duck feed entry. allowed both user and admin roles
 router.post(
-	'/create',
+	'/',
 	checkUserAuth,
 	checkUserRole(['user', 'admin']),
 	async (req, res) => {
 		await FeedsController.createFeed(req, res);
+	}
+);
+
+// update the duck feed entry. allowed both user and admin roles
+router.put(
+	'/:feedId',
+	checkUserAuth,
+	checkUserRole(['user', 'admin']),
+	async (req, res) => {
+		await FeedsController.updateFeed(req, res);
 	}
 );
 

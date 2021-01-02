@@ -35,7 +35,7 @@ const startApplication = async () => {
 		await connect(DB_URI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
-			useFindAndModify: true
+			useFindAndModify: false
 		});
 
 		log.info(

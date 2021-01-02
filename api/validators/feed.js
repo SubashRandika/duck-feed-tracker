@@ -28,7 +28,7 @@ const validateFeed = async (feedInfo) => {
 				'array.length': 'latitude value is also required',
 				'array.includes': 'longitude and latitude values should be numeric'
 			})
-	});
+	}).unknown();
 
 	return schema.validate(feedInfo);
 };
