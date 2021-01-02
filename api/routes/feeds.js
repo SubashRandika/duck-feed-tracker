@@ -2,42 +2,47 @@ const router = require('express').Router();
 const { checkUserAuth, checkUserRole } = require('../middleware/check-auth');
 const FeedsController = require('../controllers/feeds');
 
-// get all feeds data of all users accessible only for admin role
+// get all user feeds data for analyzer role
 // this is a paginated route
 router.get(
 	'/all',
 	checkUserAuth,
-	checkUserRole(['admin']),
+	checkUserRole(['analyzer']),
 	async (req, res) => {
 		await FeedsController.getAllFeeds(req, res);
 	}
 );
 
-// create a new duck feed entry. allowed both user and admin roles
-router.post(
-	'/',
+// get a single feed by id of authenticated user which has user role
+router.get(
+	'/:feedId',
 	checkUserAuth,
-	checkUserRole(['user', 'admin']),
+	checkUserRole(['user', 'analyzer']),
 	async (req, res) => {
-		await FeedsController.createFeed(req, res);
+		await FeedsController.getFeedById(req, res);
 	}
 );
 
-// update the duck feed entry. allowed both user and admin roles
+// create a new duck feed entry. possible only for user role
+router.post('/', checkUserAuth, checkUserRole(['user']), async (req, res) => {
+	await FeedsController.createFeed(req, res);
+});
+
+// update the duck feed entry. possible only for user role
 router.put(
 	'/:feedId',
 	checkUserAuth,
-	checkUserRole(['user', 'admin']),
+	checkUserRole(['user']),
 	async (req, res) => {
 		await FeedsController.updateFeed(req, res);
 	}
 );
 
-// update the duck feed entry. allowed both user and admin roles
+// update the duck feed entry. possible only for user role
 router.delete(
 	'/:feedId',
 	checkUserAuth,
-	checkUserRole(['user', 'admin']),
+	checkUserRole(['user']),
 	async (req, res) => {
 		await FeedsController.deleteFeed(req, res);
 	}

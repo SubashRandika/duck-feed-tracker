@@ -3,7 +3,7 @@ const { log } = require('../../utils/Logger');
 const Feed = require('../models/Feed');
 const { validateFeed } = require('../validators/feed');
 
-// controller for getting all the feed details irrespective of user. (only for admin user)
+// controller for getting all the feed details. analyzer role can get all data of any user
 // if page param provided, results will be paginated. default page size 10
 exports.getAllFeeds = async (req, res) => {
 	const { page } = req.query;
@@ -25,7 +25,7 @@ exports.getAllFeeds = async (req, res) => {
 				count: feeds.length,
 				feeds,
 				page: pageNumber,
-				pages: feeds.length / pageSize
+				pages: Math.ceil(feeds.length / pageSize)
 			});
 		})
 		.catch((err) => {
@@ -204,7 +204,8 @@ exports.deleteFeed = async (req, res) => {
 			message: 'Given feed id is invalid. Please check your id and try again'
 		});
 	}
-	// Check whether feed already exists or belongs to user going to update
+
+	// check whether feed already exists or belongs to user going to update
 	Feed.findById(feedId)
 		.exec()
 		.then((feed) => {
@@ -248,6 +249,48 @@ exports.deleteFeed = async (req, res) => {
 			return res.status(500).json({
 				success: false,
 				message: `Unable to get the feed ${req.params.id}`
+			});
+		});
+};
+
+// controller to get one feed by id for authenticated user
+exports.getFeedById = async (req, res) => {
+	const { user, params } = req;
+	const { feedId } = params;
+
+	if (!mongoose.Types.ObjectId.isValid(feedId)) {
+		log.warn('Unable to delete feed due to invalid feed id');
+
+		return res.status(422).json({
+			success: false,
+			message: 'Invalid feed id you are looking for. Please check and try again'
+		});
+	}
+
+	// check and get feed by id for authenticated user
+	Feed.findById(feedId)
+		.exec()
+		.then((feed) => {
+			if (!feed) {
+				return res.status(404).json({
+					success: false,
+					message: 'Feed does not exists'
+				});
+			}
+
+			if (feed.user.toString() !== user.id) {
+				return res.status(401).json({
+					success: true,
+					message: 'Sorry, you are unauthorized to get this feed'
+				});
+			}
+
+			log.debug('Successfully retrieved the feed');
+
+			return res.status(200).json({
+				success: true,
+				message: 'Feed successfully retrieved',
+				result: feed
 			});
 		});
 };

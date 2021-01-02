@@ -37,7 +37,7 @@ const validateUser = async (userDetails) => {
 			'string.email': 'email address is not valid',
 			'any.required': 'email field is required'
 		}),
-		role: Joi.string().valid('user', 'admin'),
+		role: Joi.string().valid('user', 'analyzer'),
 		username: Joi.string().trim().required().min(5).max(15).messages({
 			'string.empty': 'username field cannot be empty',
 			'string.min': 'username field should have a minimum length of {#limit}',
