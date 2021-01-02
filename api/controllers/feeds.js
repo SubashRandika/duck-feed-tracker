@@ -198,7 +198,7 @@ exports.updateFeed = async (req, res) => {
 
 			return res.status(500).json({
 				success: false,
-				message: `Unable to get the feed ${req.params.id}`
+				message: `Unable to get the feed ${feedId}`
 			});
 		});
 };
@@ -217,7 +217,7 @@ exports.deleteFeed = async (req, res) => {
 		});
 	}
 
-	// check whether feed already exists or belongs to user going to update
+	// check whether feed already exists or belongs to user going to delete
 	Feed.findById(feedId)
 		.exec()
 		.then((feed) => {
@@ -251,16 +251,16 @@ exports.deleteFeed = async (req, res) => {
 
 					return res.status(500).json({
 						success: false,
-						message: 'Unable to update your feed'
+						message: 'Unable to delete your feed'
 					});
 				});
 		})
 		.catch((err) => {
-			log.error('Feed retrieval for deletion failed', err);
+			log.error('Feed retrieval for deletion is failed', err);
 
 			return res.status(500).json({
 				success: false,
-				message: `Unable to get the feed ${req.params.id}`
+				message: `Unable to get the feed ${feedId}`
 			});
 		});
 };

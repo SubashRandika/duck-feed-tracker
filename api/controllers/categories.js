@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { log } = require('../../utils/Logger');
 const Category = require('../models/Category');
 const { validateCategory } = require('../validators/category');
@@ -8,6 +9,7 @@ exports.getAllCategories = async (req, res) => {
 		.exec()
 		.then((categories) => {
 			log.debug('Successfully fetched all categories');
+
 			return res.status(200).json(
 				categories.map((category) => ({
 					id: category.id,
@@ -18,6 +20,7 @@ exports.getAllCategories = async (req, res) => {
 		})
 		.catch((err) => {
 			log.error('Error fetching on all categories', err);
+
 			return res.status(500).json({
 				success: false,
 				message: 'Unable to fetch categories'
@@ -101,4 +104,56 @@ exports.createUpdateCategory = async (req, res) => {
 };
 
 // controller to delete a category
-exports.deleteCategory = async (req, res) => {};
+exports.deleteCategory = async (req, res) => {
+	const { params } = req;
+	const { categoryId } = params;
+
+	if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+		log.warn('Unable to delete category due to invalid category id');
+
+		return res.status(422).json({
+			success: false,
+			message: 'Invalid category id. Please check your id and try again'
+		});
+	}
+
+	// check whether category already exists before deleting it
+	Category.findById(categoryId)
+		.exec()
+		.then((category) => {
+			if (!category) {
+				return res.status(404).json({
+					success: false,
+					message: 'Category does not exists. May be already deleted'
+				});
+			}
+
+			// delete the existing category
+			category
+				.remove()
+				.then(() => {
+					log.debug('Successfully deleted the category');
+
+					return res.status(200).json({
+						success: true,
+						message: 'Category is successfully deleted'
+					});
+				})
+				.catch((err) => {
+					log.error('Category deletion failed', err);
+
+					return res.status(500).json({
+						success: false,
+						message: 'Unable to delete your category'
+					});
+				});
+		})
+		.catch((err) => {
+			log.error('Category retrieval for deletion is failed', err);
+
+			return res.status(500).json({
+				success: false,
+				message: `Unable to get the category ${categoryId}`
+			});
+		});
+};
