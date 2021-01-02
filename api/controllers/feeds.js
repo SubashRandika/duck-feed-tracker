@@ -148,6 +148,7 @@ exports.updateFeed = async (req, res) => {
 			message: 'Given feed id is invalid. Please check your id and try again'
 		});
 	}
+
 	// Check whether feed already exists or belongs to user going to update
 	Feed.findById(feedId)
 		.exec()

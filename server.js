@@ -6,6 +6,7 @@ const { PORT, DB_URI } = require('./config');
 // import application routes
 const users = require('./api/routes/users');
 const feeds = require('./api/routes/feeds');
+const categories = require('./api/routes/categories');
 // import logging setup
 const { log, connectLogger } = require('./utils/Logger');
 
@@ -27,6 +28,7 @@ require('./api/middleware/passport')(passport);
 // application routing middleware (api endpoints)
 app.use('/api/users', users);
 app.use('/api/feeds', feeds);
+app.use('/api/categories', categories);
 
 // application bootstrap function
 const startApplication = async () => {
