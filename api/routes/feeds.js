@@ -13,4 +13,14 @@ router.get(
 	}
 );
 
+// create a new duck feed entry
+router.post(
+	'/create',
+	checkUserAuth,
+	checkUserRole(['user', 'admin']),
+	async (req, res) => {
+		await FeedsController.createFeed(req, res);
+	}
+);
+
 module.exports = router;

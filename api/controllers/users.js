@@ -92,7 +92,7 @@ exports.loginUser = async (userCredentials, role, res) => {
 		if (!user) {
 			log.warn('Username not found. Invalid login credentials');
 
-			res.status(404).json({
+			return res.status(404).json({
 				success: false,
 				message:
 					'Username not found. Please check your credentials and try again.'
@@ -101,9 +101,9 @@ exports.loginUser = async (userCredentials, role, res) => {
 
 		// check whether signin user has correct role
 		if (user.role !== role) {
-			log.warn('Signin user has invalid role ', role);
+			log.warn('Signin user has invalid role', role);
 
-			res.status(403).json({
+			return res.status(403).json({
 				success: false,
 				message: 'Please make sure you are authorized to signin'
 			});

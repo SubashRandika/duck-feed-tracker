@@ -10,13 +10,10 @@ const FeedSchema = new Schema(
 			required: true
 		},
 		foodQuantity: { type: Number, default: 0 },
+		address: { type: String, required: true },
 		location: {
-			address: { type: String, required: true },
-			city: { type: String, required: true },
-			state: { type: String, required: true },
-			country: { type: String, required: true },
-			longitude: { type: Number, required: true },
-			latitude: { type: Number, required: true }
+			type: { type: String, default: 'Point' },
+			coordinates: { type: [Number], required: true }
 		},
 		duckCount: { type: Number, default: 0 },
 		isScheduled: { type: Boolean, default: false },
