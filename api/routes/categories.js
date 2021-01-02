@@ -4,7 +4,7 @@ const CategoryController = require('../controllers/categories');
 
 // get all the categories
 router.get(
-	'/all',
+	'/',
 	checkUserAuth,
 	checkUserRole(['user', 'analyzer']),
 	async (req, res) => {

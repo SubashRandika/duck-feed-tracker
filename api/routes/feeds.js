@@ -5,7 +5,7 @@ const FeedsController = require('../controllers/feeds');
 // get all users feeds data. only analyzer role permitted
 // this is a paginated route
 router.get(
-	'/all',
+	'/',
 	checkUserAuth,
 	checkUserRole(['analyzer']),
 	async (req, res) => {

@@ -3,7 +3,27 @@ const Category = require('../models/Category');
 const { validateCategory } = require('../validators/category');
 
 // controller to get all the categories
-exports.getAllCategories = async (req, res) => {};
+exports.getAllCategories = async (req, res) => {
+	Category.find()
+		.exec()
+		.then((categories) => {
+			log.debug('Successfully fetched all categories');
+			return res.status(200).json(
+				categories.map((category) => ({
+					id: category.id,
+					name: category.name,
+					description: category.description
+				}))
+			);
+		})
+		.catch((err) => {
+			log.error('Error fetching on all categories', err);
+			return res.status(500).json({
+				success: false,
+				message: 'Unable to fetch categories'
+			});
+		});
+};
 
 // controller to create or update existing category
 exports.createUpdateCategory = async (req, res) => {

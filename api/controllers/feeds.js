@@ -17,7 +17,7 @@ exports.getFeeds = async (req, res, query = {}) => {
 		pageNumber = parseInt(page);
 	}
 
-	if (req.user.id !== req.params.userId) {
+	if (req.user.role === 'user' && req.user.id !== req.params.userId) {
 		return res.status(403).json({
 			success: false,
 			message: 'You are not permitted to get the feeds'
