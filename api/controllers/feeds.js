@@ -3,9 +3,12 @@ const { log } = require('../../utils/Logger');
 const Feed = require('../models/Feed');
 const { validateFeed } = require('../validators/feed');
 
-// controller for getting all the feed details. analyzer role can get all data of any user
-// if page param provided, results will be paginated. default page size 10
-exports.getAllFeeds = async (req, res) => {
+/**
+ * controller for getting all the feeds based on query argument.
+ * if query did not passed get all the feeds of all users. otherwise get feeds based on query
+ * query param page is used to paginated all feeds. By default pageSize is 10
+ */
+exports.getFeeds = async (req, res, query = {}) => {
 	const { page } = req.query;
 	const pageSize = 10;
 	let pageNumber = 0;
@@ -14,17 +17,25 @@ exports.getAllFeeds = async (req, res) => {
 		pageNumber = parseInt(page);
 	}
 
-	Feed.find()
+	if (req.user.id !== req.params.userId) {
+		return res.status(403).json({
+			success: false,
+			message: 'You are not permitted to get the feeds'
+		});
+	}
+
+	Feed.find(query)
 		.limit(pageSize)
 		.skip(pageSize * pageNumber)
 		.sort({ dateTime: -1 })
+		.exec()
 		.then((feeds) => {
-			log.debug('Successfully fetched all the feeds');
+			log.debug('Successfully fetched the feeds');
 
 			return res.status(200).json({
 				count: feeds.length,
 				feeds,
-				page: pageNumber,
+				page: pageNumber + 1,
 				pages: Math.ceil(feeds.length / pageSize)
 			});
 		})
@@ -32,7 +43,7 @@ exports.getAllFeeds = async (req, res) => {
 			log.error('Error fetching on all feeds', err);
 			return res.status(500).json({
 				success: false,
-				message: 'Unable to fetch all feeds details'
+				message: 'Unable to fetch feeds details'
 			});
 		});
 };
@@ -149,9 +160,9 @@ exports.updateFeed = async (req, res) => {
 			}
 
 			if (feed.user.toString() !== user.id) {
-				return res.status(401).json({
-					success: true,
-					message: 'You are not authorized to update. Only owner can update'
+				return res.status(403).json({
+					success: false,
+					message: 'You are not permitted to update. Only owner can update'
 				});
 			}
 
@@ -217,9 +228,9 @@ exports.deleteFeed = async (req, res) => {
 			}
 
 			if (feed.user.toString() !== user.id) {
-				return res.status(401).json({
-					success: true,
-					message: 'You are not authorized to delete. Only owner can delete'
+				return res.status(403).json({
+					success: false,
+					message: 'You are not permitted to delete. Only owner can delete'
 				});
 			}
 
@@ -259,7 +270,7 @@ exports.getFeedById = async (req, res) => {
 	const { feedId } = params;
 
 	if (!mongoose.Types.ObjectId.isValid(feedId)) {
-		log.warn('Unable to delete feed due to invalid feed id');
+		log.warn('Unable to get the feed due to invalid feed id');
 
 		return res.status(422).json({
 			success: false,
@@ -279,9 +290,9 @@ exports.getFeedById = async (req, res) => {
 			}
 
 			if (feed.user.toString() !== user.id) {
-				return res.status(401).json({
-					success: true,
-					message: 'Sorry, you are unauthorized to get this feed'
+				return res.status(403).json({
+					success: false,
+					message: 'You are not permitted to get this feed'
 				});
 			}
 

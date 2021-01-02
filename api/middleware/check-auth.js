@@ -6,7 +6,7 @@ const checkUserAuth = passport.authenticate('jwt', { session: false });
 // user permissions checking middleware
 const checkUserRole = (roles) => ({ user }, res, next) =>
 	!roles.includes(user.role)
-		? res.status(401).json({
+		? res.status(403).json({
 				success: false,
 				message: 'Access denied. Please check your permissions'
 		  })

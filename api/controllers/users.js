@@ -137,7 +137,7 @@ exports.loginUser = async (userCredentials, role, res) => {
 		} else {
 			log.warn('Provided password is incorrect. Please check and try again');
 
-			return res.status(403).json({
+			return res.status(401).json({
 				success: false,
 				message: 'Incorrect password. Please check and try again'
 			});
