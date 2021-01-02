@@ -19,7 +19,7 @@ exports.registerUser = async (userDetails, role, res) => {
 			log.warn('Invalid user details provided', error.details[0].message);
 
 			return res
-				.status(400)
+				.status(422)
 				.json({ success: false, message: error.details[0].message });
 		}
 
@@ -29,7 +29,7 @@ exports.registerUser = async (userDetails, role, res) => {
 			log.warn('You trying to create user with existing username');
 
 			return res
-				.status(400)
+				.status(422)
 				.json({ success: false, message: 'Username is already taken' });
 		}
 
@@ -39,7 +39,7 @@ exports.registerUser = async (userDetails, role, res) => {
 			log.warn('You trying to register with existing email');
 
 			return res
-				.status(400)
+				.status(422)
 				.json({ success: false, message: 'Email is already registered' });
 		}
 
@@ -80,7 +80,7 @@ exports.loginUser = async (userCredentials, role, res) => {
 			log.warn('Invalid user credentials provided', error.details[0].message);
 
 			return res
-				.status(400)
+				.status(422)
 				.json({ success: false, message: error.details[0].message });
 		}
 

@@ -46,7 +46,7 @@ exports.createFeed = async (req, res) => {
 		log.warn('Invalid feed details provided', error.details[0].message);
 
 		return res
-			.status(400)
+			.status(422)
 			.json({ success: false, message: error.details[0].message });
 	}
 
