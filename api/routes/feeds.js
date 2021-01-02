@@ -33,4 +33,14 @@ router.put(
 	}
 );
 
+// update the duck feed entry. allowed both user and admin roles
+router.delete(
+	'/:feedId',
+	checkUserAuth,
+	checkUserRole(['user', 'admin']),
+	async (req, res) => {
+		await FeedsController.deleteFeed(req, res);
+	}
+);
+
 module.exports = router;

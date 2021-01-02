@@ -75,7 +75,7 @@ exports.createFeed = async (req, res) => {
 
 			return res.status(500).json({
 				success: false,
-				message: `Unable to create your feed.`
+				message: 'Unable to create your feed'
 			});
 		});
 };
@@ -144,15 +144,14 @@ exports.updateFeed = async (req, res) => {
 			if (!feed) {
 				return res.status(404).json({
 					success: false,
-					message: 'Feed does not exists. May be already deleted'
+					message: 'Feed does not exists'
 				});
 			}
 
 			if (feed.user.toString() !== user.id) {
 				return res.status(401).json({
 					success: true,
-					message:
-						'You are not authorized to update. Only owner can update this'
+					message: 'You are not authorized to update. Only owner can update'
 				});
 			}
 
@@ -178,12 +177,73 @@ exports.updateFeed = async (req, res) => {
 
 					return res.status(500).json({
 						success: false,
-						message: `Unable to update your feed.`
+						message: 'Unable to update your feed'
 					});
 				});
 		})
 		.catch((err) => {
-			log.error('Feed retrieval failed', err);
+			log.error('Feed retrieval for update failed', err);
+
+			return res.status(500).json({
+				success: false,
+				message: `Unable to get the feed ${req.params.id}`
+			});
+		});
+};
+
+// controller to delete existing duck feed entry by created user
+exports.deleteFeed = async (req, res) => {
+	const { user, params } = req;
+	const { feedId } = params;
+
+	if (!mongoose.Types.ObjectId.isValid(feedId)) {
+		log.warn('Unable to delete feed due to invalid feed id');
+
+		return res.status(422).json({
+			success: false,
+			message: 'Given feed id is invalid. Please check your id and try again'
+		});
+	}
+	// Check whether feed already exists or belongs to user going to update
+	Feed.findById(feedId)
+		.exec()
+		.then((feed) => {
+			if (!feed) {
+				return res.status(404).json({
+					success: false,
+					message: 'Feed does not exists. May be already deleted'
+				});
+			}
+
+			if (feed.user.toString() !== user.id) {
+				return res.status(401).json({
+					success: true,
+					message: 'You are not authorized to delete. Only owner can delete'
+				});
+			}
+
+			// delete the existing feed
+			feed
+				.remove()
+				.then(() => {
+					log.debug('Successfully deleted the feed entry');
+
+					return res.status(200).json({
+						success: true,
+						message: 'Your feed successfully deleted'
+					});
+				})
+				.catch((err) => {
+					log.error('Feed deletion failed', err);
+
+					return res.status(500).json({
+						success: false,
+						message: 'Unable to update your feed'
+					});
+				});
+		})
+		.catch((err) => {
+			log.error('Feed retrieval for deletion failed', err);
 
 			return res.status(500).json({
 				success: false,
