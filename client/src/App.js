@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import configureStore from './redux/configureStore';
 import setAuthToken from './utils/setAuthToken';
-import { setCurrentUser } from './redux/actions/authActions';
+import { setCurrentUser, logoutUser } from './redux/actions/authActions';
 import Landing from './pages/Landing';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -27,6 +27,14 @@ if (jwtToken) {
 
 	// sets whether user is authenticated or not
 	store.dispatch(setCurrentUser(decoded));
+
+	// check whether token has expired
+	const currentTime = Date.now() / 1000;
+
+	if (decoded.exp < currentTime) {
+		// logout currently login users
+		store.dispatch(logoutUser());
+	}
 }
 
 function App() {

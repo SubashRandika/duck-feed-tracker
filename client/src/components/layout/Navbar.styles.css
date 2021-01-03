@@ -1,0 +1,13 @@
+.ant-layout-header.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 5rem;
+	padding: 0;
+	background: #ffffff;
+}
+
+.ant-avatar.navbar__avatar {
+	color: #f56a00;
+	background-color: #fde3cf;
+}

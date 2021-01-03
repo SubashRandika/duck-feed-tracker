@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import { GET_ERRORS, SET_CURRENT_USER } from '../constants/types';
 import { showNotification } from '../../utils/showNotification';
 import setAuthToken from '../../utils/setAuthToken';
+import { clearErrors } from './errorActions';
 
 // register a new user (Sign up a user)
 export const registerUser = (userData, history) => (dispatch) => {
@@ -56,6 +57,21 @@ export const signinUser = (credentials, history) => (dispatch) => {
 				payload: err.response.data
 			})
 		);
+};
+
+// logout currently signin user
+export const logoutUser = () => (dispatch) => {
+	// remove token from localStorage
+	localStorage.removeItem('jwtToken');
+
+	// remove authorization header from future requests
+	setAuthToken(false);
+
+	// set current signin user to {} which sets isAuthenticated to be false
+	dispatch(setCurrentUser({}));
+
+	// clear errors state
+	dispatch(clearErrors());
 };
 
 // set the currently signed in user details into redux store
