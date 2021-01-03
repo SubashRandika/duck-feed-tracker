@@ -1,6 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Card, Tooltip, Typography } from 'antd';
+import { connect } from 'react-redux';
+import { Form, Input, Button, Card, Tooltip, Typography, Alert } from 'antd';
 import {
 	MailOutlined,
 	LockOutlined,
@@ -13,11 +16,15 @@ import {
 	emailValidator,
 	whitespaceValidator
 } from '../validators/auth';
+import { registerUser } from '../redux/actions/authActions';
+import { clearErrors } from '../redux/actions/errorActions';
 import './SignUp.styles.css';
 
 const { Text } = Typography;
 
-function SignUp() {
+function SignUp({ auth, errors, registerUser, clearErrors }) {
+	const { message } = errors;
+	let history = useHistory();
 	const initialSignUpDetails = {
 		name: '',
 		username: '',
@@ -25,19 +32,36 @@ function SignUp() {
 		password: ''
 	};
 
-	const handleSignUp = (userData) => {
+	const handleSignUp = ({ name, username, email, password }) => {
 		const newUserDetails = {
-			name: userData.name,
-			username: userData.username,
-			email: userData.email,
-			password: userData.password
+			name,
+			username,
+			email,
+			password
 		};
 
-		console.log(newUserDetails);
+		registerUser(newUserDetails, history);
+	};
+
+	const isErrorsAvailable = () => {
+		return Object.keys(errors).length !== 0;
+	};
+
+	const handleAlertClose = (event) => {
+		clearErrors();
 	};
 
 	return (
 		<div className='signup__container'>
+			{isErrorsAvailable() && (
+				<Alert
+					type='error'
+					message={message}
+					showIcon
+					closable
+					onClose={handleAlertClose}
+				/>
+			)}
 			<Text className='signup__title' type='secondary'>
 				Sign Up
 			</Text>
@@ -131,4 +155,22 @@ function SignUp() {
 	);
 }
 
-export default SignUp;
+SignUp.propTypes = {
+	auth: PropTypes.object.isRequired,
+	errors: PropTypes.object.isRequired,
+	registerUser: PropTypes.func.isRequired,
+	clearErrors: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => ({
+	auth: state.auth,
+	errors: state.errors
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	registerUser: (newUserData, history) =>
+		dispatch(registerUser(newUserData, history)),
+	clearErrors: () => dispatch(clearErrors())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
