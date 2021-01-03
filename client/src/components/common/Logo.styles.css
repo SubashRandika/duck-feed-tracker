@@ -1,0 +1,18 @@
+.logo__container {
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.ant-typography.logo__text__left {
+	margin: 0;
+	font-size: 3rem;
+	font-weight: 800;
+	color: #e89f7c;
+}
+
+.ant-typography + h1.ant-typography.logo__text__right {
+	margin-top: 1.75rem;
+	font-weight: 800;
+	color: #655e38;
+}
