@@ -8,6 +8,11 @@ import {
 	QuestionCircleOutlined
 } from '@ant-design/icons';
 import Logo from '../components/common/Logo';
+import {
+	requiredValidator,
+	emailValidator,
+	whitespaceValidator
+} from '../validators/auth';
 import './SignUp.styles.css';
 
 const { Text } = Typography;
@@ -46,7 +51,12 @@ function SignUp() {
 					initialValues={initialSignUpDetails}
 					onFinish={handleSignUp}
 				>
-					<Form.Item className='name_form_item' name='name' hasFeedback>
+					<Form.Item
+						className='name_form_item'
+						name='name'
+						rules={[requiredValidator('name'), whitespaceValidator('name')]}
+						hasFeedback
+					>
 						<Input
 							size='large'
 							placeholder='Name'
@@ -58,7 +68,15 @@ function SignUp() {
 							}
 						/>
 					</Form.Item>
-					<Form.Item className='username_form_item' name='username' hasFeedback>
+					<Form.Item
+						className='username_form_item'
+						name='username'
+						rules={[
+							requiredValidator('username'),
+							whitespaceValidator('username')
+						]}
+						hasFeedback
+					>
 						<Input
 							size='large'
 							placeholder='Username'
@@ -70,14 +88,24 @@ function SignUp() {
 							}
 						/>
 					</Form.Item>
-					<Form.Item className='email_form_item' name='email' hasFeedback>
+					<Form.Item
+						className='email_form_item'
+						name='email'
+						rules={[requiredValidator('email'), emailValidator]}
+						hasFeedback
+					>
 						<Input
 							size='large'
 							prefix={<MailOutlined className='form_item_icon' />}
 							placeholder='Email'
 						/>
 					</Form.Item>
-					<Form.Item className='password_form_item' name='password' hasFeedback>
+					<Form.Item
+						className='password_form_item'
+						name='password'
+						rules={[requiredValidator('password')]}
+						hasFeedback
+					>
 						<Input.Password
 							size='large'
 							placeholder='Password'

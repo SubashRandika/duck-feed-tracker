@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Form, Input, Button, Card, Typography } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { requiredValidator, emailValidator } from '../validators/auth';
 import Logo from '../components/common/Logo';
 import './SignIn.styles.css';
 
@@ -34,14 +35,24 @@ function SignIn() {
 					initialValues={initialCredentials}
 					onFinish={handleSignIn}
 				>
-					<Form.Item className='email_form_item' name='email' hasFeedback>
+					<Form.Item
+						className='email_form_item'
+						name='email'
+						rules={[requiredValidator('email'), emailValidator]}
+						hasFeedback
+					>
 						<Input
 							size='large'
 							prefix={<MailOutlined className='form_item_icon' />}
 							placeholder='Email'
 						/>
 					</Form.Item>
-					<Form.Item className='password_form_item' name='password' hasFeedback>
+					<Form.Item
+						className='password_form_item'
+						name='password'
+						rules={[requiredValidator('password')]}
+						hasFeedback
+					>
 						<Input.Password
 							size='large'
 							prefix={<LockOutlined className='form_item_icon' />}
