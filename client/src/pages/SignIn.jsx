@@ -1,27 +1,44 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Card, Typography } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import { requiredValidator, emailValidator } from '../validators/auth';
+import { Form, Input, Button, Card, Typography, Alert } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import { requiredValidator, whitespaceValidator } from '../validators/auth';
+import { signinUser } from '../redux/actions/authActions';
+import { clearErrors } from '../redux/actions/errorActions';
+import { isErrorsEmpty } from '../utils/isEmpty';
 import Logo from '../components/common/Logo';
 import './SignIn.styles.css';
 
 const { Text } = Typography;
 
-function SignIn() {
-	const initialCredentials = { email: '', password: '' };
+function SignIn({ auth, errors, signinUser, clearErrors }) {
+	const { message } = errors;
+	const history = useHistory();
+	const initialCredentials = { username: '', password: '' };
 
-	const handleSignIn = (credentials) => {
+	const handleSignIn = ({ username, password }) => {
 		const userCredentials = {
-			email: credentials.email,
-			password: credentials.password
+			username,
+			password
 		};
 
-		console.log(userCredentials);
+		signinUser(userCredentials, history);
 	};
 
 	return (
 		<div className='signin__container'>
+			{isErrorsEmpty(errors) && (
+				<Alert
+					type='error'
+					message={message}
+					showIcon
+					closable
+					onClose={() => clearErrors()}
+				/>
+			)}
 			<Text className='signin__title' type='secondary'>
 				Sign In
 			</Text>
@@ -36,15 +53,18 @@ function SignIn() {
 					onFinish={handleSignIn}
 				>
 					<Form.Item
-						className='email_form_item'
-						name='email'
-						rules={[requiredValidator('email'), emailValidator]}
+						className='username_form_item'
+						name='username'
+						rules={[
+							requiredValidator('username'),
+							whitespaceValidator('username')
+						]}
 						hasFeedback
 					>
 						<Input
 							size='large'
-							prefix={<MailOutlined className='form_item_icon' />}
-							placeholder='Email'
+							prefix={<UserOutlined className='form_item_icon' />}
+							placeholder='Username'
 						/>
 					</Form.Item>
 					<Form.Item
@@ -83,4 +103,22 @@ function SignIn() {
 	);
 }
 
-export default SignIn;
+SignIn.propTypes = {
+	auth: PropTypes.object.isRequired,
+	errors: PropTypes.object.isRequired,
+	signinUser: PropTypes.func.isRequired,
+	clearErrors: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => ({
+	auth: state.auth,
+	errors: state.errors
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	signinUser: (credentials, history) =>
+		dispatch(signinUser(credentials, history)),
+	clearErrors: () => dispatch(clearErrors())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

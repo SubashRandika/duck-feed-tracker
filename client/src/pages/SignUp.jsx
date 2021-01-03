@@ -18,6 +18,7 @@ import {
 } from '../validators/auth';
 import { registerUser } from '../redux/actions/authActions';
 import { clearErrors } from '../redux/actions/errorActions';
+import { isErrorsEmpty } from '../utils/isEmpty';
 import './SignUp.styles.css';
 
 const { Text } = Typography;
@@ -43,23 +44,15 @@ function SignUp({ auth, errors, registerUser, clearErrors }) {
 		registerUser(newUserDetails, history);
 	};
 
-	const isErrorsAvailable = () => {
-		return Object.keys(errors).length !== 0;
-	};
-
-	const handleAlertClose = (event) => {
-		clearErrors();
-	};
-
 	return (
 		<div className='signup__container'>
-			{isErrorsAvailable() && (
+			{isErrorsEmpty(errors) && (
 				<Alert
 					type='error'
 					message={message}
 					showIcon
 					closable
-					onClose={handleAlertClose}
+					onClose={() => clearErrors()}
 				/>
 			)}
 			<Text className='signup__title' type='secondary'>
@@ -106,7 +99,7 @@ function SignUp({ auth, errors, registerUser, clearErrors }) {
 							placeholder='Username'
 							prefix={<UserOutlined className='form_item_icon' />}
 							suffix={
-								<Tooltip title='What do you want us to call when you signed in?'>
+								<Tooltip title='Give anything you always remember. We take this to signin'>
 									<QuestionCircleOutlined />
 								</Tooltip>
 							}

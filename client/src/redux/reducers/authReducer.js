@@ -1,5 +1,5 @@
 import { SET_CURRENT_USER } from '../constants/types';
-import isEmpty from '../../utils/isEmpty';
+import { isEmpty } from '../../utils/isEmpty';
 
 const initialState = {
 	isAuthenticated: false,
