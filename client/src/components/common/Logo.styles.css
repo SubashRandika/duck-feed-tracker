@@ -12,7 +12,10 @@
 }
 
 .ant-typography + h1.ant-typography.logo__text__right {
-	margin-top: 1.75rem;
+	display: flex;
+	align-items: center;
+	margin: 0;
 	font-weight: 800;
 	color: #655e38;
+	padding-top: 0.5rem;
 }

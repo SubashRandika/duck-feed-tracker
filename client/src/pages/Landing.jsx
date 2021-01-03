@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Layout, Typography, Button, Image } from 'antd';
 import './Landing.styles.css';
 import Logo from '../components/common/Logo';
@@ -13,14 +14,16 @@ function Landing() {
 		<Layout className='landing'>
 			<Header className='header__nav'>
 				<Logo />
-				<Button
-					className='signin__button'
-					type='primary'
-					shape='round'
-					size='large'
-				>
-					Sign In
-				</Button>
+				<RouterLink to='/signin'>
+					<Button
+						className='signin__button'
+						type='primary'
+						shape='round'
+						size='large'
+					>
+						Sign In
+					</Button>
+				</RouterLink>
 			</Header>
 			<Content className='landing__content'>
 				<div className='content__left'>
@@ -37,9 +40,16 @@ function Landing() {
 					<Title className='sub__text' level={4}>
 						Join with us today
 					</Title>
-					<Button className='signup__button' danger shape='round' size='large'>
-						Create an account
-					</Button>
+					<RouterLink to='/register'>
+						<Button
+							className='signup__button'
+							danger
+							shape='round'
+							size='large'
+						>
+							Create an account
+						</Button>
+					</RouterLink>
 				</div>
 				<div className='image__container'>
 					<Image width={650} src={HomeImage} />

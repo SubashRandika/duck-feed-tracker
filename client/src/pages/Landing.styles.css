@@ -1,11 +1,11 @@
-.landing {
+.ant-layout.landing {
 	height: 100vh;
 	background: #ffffff;
 	padding: 0;
 	margin: 0 12rem;
 }
 
-.header__nav {
+.ant-layout-header.header__nav {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -69,7 +69,7 @@
 	z-index: 0;
 }
 
-.footer {
+.ant-layout-footer.footer {
 	background: #ffffff;
 	text-align: center;
 }

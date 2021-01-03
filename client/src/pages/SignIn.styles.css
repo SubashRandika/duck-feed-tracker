@@ -1,0 +1,66 @@
+.signin__container {
+	height: 95vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.ant-typography.signin__title {
+	font-size: 2rem;
+	font-weight: 800;
+	margin-bottom: 1rem;
+}
+
+.ant-card.ant-card-bordered.signin__card {
+	width: 27rem;
+	height: auto;
+}
+
+.ant-card.ant-card-bordered.signin__card > .ant-card-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.ant-form.signin__form {
+	margin-top: 3rem;
+	padding: 0 0.625rem;
+	width: 100%;
+}
+
+.ant-form.signin__form.ant-input {
+	line-height: 1;
+	margin-left: 1rem;
+}
+
+.ant-row.ant-form-item.email_form_item,
+.ant-row.ant-form-item.password_form_item,
+.ant-row.ant-form-item.signin_btn_form_item {
+	margin-bottom: 1rem;
+}
+
+.anticon.form_item_icon {
+	margin-right: 0.4rem;
+	color: #c5c5c5;
+}
+
+.signup_link {
+	margin-left: 0.625rem;
+}
+
+.signup_link:hover {
+	color: #0275d8;
+	font-weight: 400;
+}
+
+.ant-form-item.signup_text_form_item {
+	margin-bottom: 0;
+}
+
+.ant-btn.signin_button {
+	width: 100%;
+	font-weight: 600;
+	color: #ffffff;
+}
