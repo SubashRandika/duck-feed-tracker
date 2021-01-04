@@ -10,7 +10,7 @@ import { signinUser } from '../redux/actions/authActions';
 import { clearErrors } from '../redux/actions/errorActions';
 import { isErrorsEmpty } from '../utils/isEmpty';
 import Logo from '../components/common/Logo';
-import FooterSection from '../components/common/FooterSection';
+import FooterSection from '../components/layout/FooterSection';
 import './SignIn.styles.css';
 
 const { Text } = Typography;

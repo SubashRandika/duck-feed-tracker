@@ -11,7 +11,7 @@ import {
 	QuestionCircleOutlined
 } from '@ant-design/icons';
 import Logo from '../components/common/Logo';
-import FooterSection from '../components/common/FooterSection';
+import FooterSection from '../components/layout/FooterSection';
 import {
 	requiredValidator,
 	emailValidator,

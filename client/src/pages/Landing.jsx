@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Layout, Typography, Button, Image } from 'antd';
 import './Landing.styles.css';
 import Logo from '../components/common/Logo';
-import FooterSection from '../components/common/FooterSection';
+import FooterSection from '../components/layout/FooterSection';
 import HomeImage from '../assets/home.png';
 import { ReactComponent as BackgroundBlob } from '../assets/blob.svg';
 
