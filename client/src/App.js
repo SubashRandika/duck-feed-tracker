@@ -42,10 +42,18 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Switch>
-					<PublicRoute exact path='/' component={Landing} />
-					<PublicRoute exact path='/signin' component={SignIn} />
-					<PublicRoute exact path='/register' component={SignUp} />
-					<PrivateRoute exact path='/home' component={Home} />
+					<PublicRoute exact path='/'>
+						<Landing />
+					</PublicRoute>
+					<PublicRoute exact path='/signin'>
+						<SignIn />
+					</PublicRoute>
+					<PublicRoute exact path='/register'>
+						<SignUp />
+					</PublicRoute>
+					<PrivateRoute exact path='/home'>
+						<Home />
+					</PrivateRoute>
 				</Switch>
 			</Router>
 		</Provider>

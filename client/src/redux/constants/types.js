@@ -8,3 +8,6 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 // feed types
 export const FEEDS_LOADING = 'FEEDS_LOADING';
 export const GET_USER_FEEDS = 'GET_USER_FEEDS';
+
+// loading ui types
+export const LOADING_UI = 'LOADING_UI';

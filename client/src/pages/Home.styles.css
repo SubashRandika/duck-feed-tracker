@@ -4,3 +4,15 @@
 	padding: 0;
 	margin: 0 12rem;
 }
+
+.spin__container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 75vh;
+}
+
+.new__feedBtn {
+	margin: 1.5rem 0;
+	float: right;
+}
