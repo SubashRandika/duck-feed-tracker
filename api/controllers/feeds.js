@@ -28,6 +28,7 @@ exports.getFeeds = async (req, res, query = {}) => {
 		.limit(pageSize)
 		.skip(pageSize * pageNumber)
 		.sort({ dateTime: -1 })
+		.populate('foodCategory', ['name', 'description'])
 		.exec()
 		.then((feeds) => {
 			log.debug('Successfully fetched the feeds');
@@ -281,6 +282,7 @@ exports.getFeedById = async (req, res) => {
 
 	// check and get feed by id for authenticated user
 	Feed.findById(feedId)
+		.populate('foodCategory', ['name', 'description'])
 		.exec()
 		.then((feed) => {
 			if (!feed) {
