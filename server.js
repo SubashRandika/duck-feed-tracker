@@ -3,7 +3,7 @@ const path = require('path');
 const passport = require('passport');
 const { connect } = require('mongoose');
 // import application constants
-const { PORT, DB_URI } = require('./config');
+const { DB_URI } = require('./config');
 // import application routes
 const users = require('./api/routes/users');
 const feeds = require('./api/routes/feeds');
@@ -54,6 +54,8 @@ const startApplication = async () => {
 			'Successfully connected to the database',
 			DB_URI.replace(/\/\/.*@/, '//*****:*****@')
 		);
+
+		const PORT = process.env.PORT || 5000;
 
 		// express server runs on port 5000 after successful connection to the DB
 		app.listen(PORT, () => {
