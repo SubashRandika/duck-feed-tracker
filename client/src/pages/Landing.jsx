@@ -3,11 +3,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Layout, Typography, Button, Image } from 'antd';
 import './Landing.styles.css';
 import Logo from '../components/common/Logo';
+import FooterSection from '../components/common/FooterSection';
 import HomeImage from '../assets/home.png';
 import { ReactComponent as BackgroundBlob } from '../assets/blob.svg';
 
-const { Header, Footer, Content } = Layout;
-const { Text, Link, Title } = Typography;
+const { Header, Content } = Layout;
+const { Title } = Typography;
 
 function Landing() {
 	return (
@@ -56,12 +57,7 @@ function Landing() {
 					<BackgroundBlob className='bg__blob' />
 				</div>
 			</Content>
-			<Footer className='footer'>
-				<Text type='secondary'>DuckFeed Tracker ©2021 Created by &nbsp;</Text>
-				<Link href='https://github.com/SubashRandika' target='_blank'>
-					Randika Rodrigo
-				</Link>
-			</Footer>
+			<FooterSection />
 		</Layout>
 	);
 }

@@ -10,6 +10,7 @@ import { signinUser } from '../redux/actions/authActions';
 import { clearErrors } from '../redux/actions/errorActions';
 import { isErrorsEmpty } from '../utils/isEmpty';
 import Logo from '../components/common/Logo';
+import FooterSection from '../components/common/FooterSection';
 import './SignIn.styles.css';
 
 const { Text } = Typography;
@@ -29,77 +30,80 @@ function SignIn({ auth, errors, signinUser, clearErrors }) {
 	};
 
 	return (
-		<div className='signin__container'>
-			{isErrorsEmpty(errors) && (
-				<Alert
-					type='error'
-					message={message}
-					showIcon
-					closable
-					onClose={() => clearErrors()}
-				/>
-			)}
-			<Text className='signin__title' type='secondary'>
-				Sign In
-			</Text>
-			<Card className='signin__card'>
-				<Link to='/'>
-					<Logo />
-				</Link>
-				<Form
-					className='signin__form'
-					name='signin_form'
-					initialValues={initialCredentials}
-					onFinish={handleSignIn}
-				>
-					<Form.Item
-						className='username_form_item'
-						name='username'
-						rules={[
-							requiredValidator('username'),
-							whitespaceValidator('username')
-						]}
-						hasFeedback
+		<React.Fragment>
+			<div className='signin__container'>
+				{isErrorsEmpty(errors) && (
+					<Alert
+						type='error'
+						message={message}
+						showIcon
+						closable
+						onClose={() => clearErrors()}
+					/>
+				)}
+				<Text className='signin__title' type='secondary'>
+					Sign In
+				</Text>
+				<Card className='signin__card'>
+					<Link to='/'>
+						<Logo />
+					</Link>
+					<Form
+						className='signin__form'
+						name='signin_form'
+						initialValues={initialCredentials}
+						onFinish={handleSignIn}
 					>
-						<Input
-							size='large'
-							prefix={<UserOutlined className='form_item_icon' />}
-							placeholder='Username'
-						/>
-					</Form.Item>
-					<Form.Item
-						className='password_form_item'
-						name='password'
-						rules={[requiredValidator('password')]}
-						hasFeedback
-					>
-						<Input.Password
-							size='large'
-							prefix={<LockOutlined className='form_item_icon' />}
-							placeholder='Password'
-						/>
-					</Form.Item>
-					<Form.Item className='signin_btn_form_item'>
-						<Button
-							className='signin_button'
-							type='primary'
-							size='large'
-							htmlType='submit'
+						<Form.Item
+							className='username_form_item'
+							name='username'
+							rules={[
+								requiredValidator('username'),
+								whitespaceValidator('username')
+							]}
+							hasFeedback
 						>
-							Sign In
-						</Button>
-					</Form.Item>
-					<Form.Item className='signup_text_form_item'>
-						<span>Do not have an account?</span>
-						<span>
-							<Link className='signup_link' to='/register'>
-								Sign Up
-							</Link>
-						</span>
-					</Form.Item>
-				</Form>
-			</Card>
-		</div>
+							<Input
+								size='large'
+								prefix={<UserOutlined className='form_item_icon' />}
+								placeholder='Username'
+							/>
+						</Form.Item>
+						<Form.Item
+							className='password_form_item'
+							name='password'
+							rules={[requiredValidator('password')]}
+							hasFeedback
+						>
+							<Input.Password
+								size='large'
+								prefix={<LockOutlined className='form_item_icon' />}
+								placeholder='Password'
+							/>
+						</Form.Item>
+						<Form.Item className='signin_btn_form_item'>
+							<Button
+								className='signin_button'
+								type='primary'
+								size='large'
+								htmlType='submit'
+							>
+								Sign In
+							</Button>
+						</Form.Item>
+						<Form.Item className='signup_text_form_item'>
+							<span>Do not have an account?</span>
+							<span>
+								<Link className='signup_link' to='/register'>
+									Sign Up
+								</Link>
+							</span>
+						</Form.Item>
+					</Form>
+				</Card>
+			</div>
+			<FooterSection />
+		</React.Fragment>
 	);
 }
 
