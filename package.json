@@ -1,6 +1,9 @@
 {
 	"name": "duck-feed-tracker",
 	"version": "1.0.0",
+	"engines": {
+		"node": "13.x"
+	},
 	"description": "NodeJS and MongoDB RESTful API to keep track how duck feeding happens around the world",
 	"main": "server.js",
 	"scripts": {
