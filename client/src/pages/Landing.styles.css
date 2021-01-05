@@ -57,6 +57,7 @@
 	justify-content: center;
 	align-items: center;
 	height: auto;
+	animation: FadeInEffect 3s ease-out 1 normal forwards;
 }
 
 .image__container > .ant-image {
@@ -75,4 +76,16 @@
 .ant-layout-footer.footer {
 	background: #ffffff;
 	text-align: center;
+}
+
+@keyframes FadeInEffect {
+	0% {
+		opacity: 0;
+	}
+	5% {
+		opacity: 0.2;
+	}
+	100% {
+		opacity: 1;
+	}
 }
