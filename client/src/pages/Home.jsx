@@ -27,7 +27,7 @@ function Home({ auth, feeds, ui, getFeedsByUser }) {
 	if (ui.loading) {
 		feedsTabContent = (
 			<div className='spin__container'>
-				<Spin size='large' />
+				<Spin tip='Loading...' size='large' />
 			</div>
 		);
 	} else {
