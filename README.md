@@ -4,6 +4,11 @@
 
 [Duck Feed Tracker](https://duckfeedtracker.herokuapp.com/)
 
+Note: You can use existing account to preview currrent data
+
+username: ranrod
+password: 1Qaz2wsx@
+
 ## Preview
 
 ![Alt text](DuckFeedTracker.png?raw=true 'DuckFeed Landing Page')
