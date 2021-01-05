@@ -52,20 +52,23 @@
 }
 
 .image__container {
+	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: auto;
 }
 
 .image__container > .ant-image {
 	z-index: 1;
+	width: 100%;
+	height: auto;
 }
 
 .bg__blob {
-	position: fixed;
-	width: 50rem;
-	top: 7.5rem;
-	right: 10rem;
+	position: absolute;
+	width: 100%;
+	height: auto;
 	z-index: 0;
 }
 
