@@ -87,6 +87,7 @@ function SignIn({ auth, errors, signinUser, clearErrors }) {
 								type='primary'
 								size='large'
 								htmlType='submit'
+								loading={auth.userLoading}
 							>
 								Sign In
 							</Button>

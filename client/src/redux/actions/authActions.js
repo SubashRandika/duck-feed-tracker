@@ -1,6 +1,10 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_CURRENT_USER } from '../constants/types';
+import {
+	GET_ERRORS,
+	SET_CURRENT_USER,
+	SET_USER_LOADING
+} from '../constants/types';
 import { showNotification } from '../../utils/showNotification';
 import setAuthToken from '../../utils/setAuthToken';
 import { clearErrors } from './errorActions';
@@ -25,6 +29,8 @@ export const registerUser = (userData, history) => (dispatch) => {
 
 // login user with credentials (Sign in user with registered user)
 export const signinUser = (credentials, history) => (dispatch) => {
+	dispatch(setUserLoading(true));
+
 	axios
 		.post('/api/users/login-user', credentials)
 		.then(({ data }) => {
@@ -50,13 +56,17 @@ export const signinUser = (credentials, history) => (dispatch) => {
 
 			// navigate to user's home route
 			history.push('/home');
+
+			dispatch(setUserLoading(false));
 		})
-		.catch((err) =>
+		.catch((err) => {
 			dispatch({
 				type: GET_ERRORS,
 				payload: err.response.data
-			})
-		);
+			});
+
+			dispatch(setUserLoading(false));
+		});
 };
 
 // logout currently signin user
@@ -78,4 +88,10 @@ export const logoutUser = () => (dispatch) => {
 export const setCurrentUser = (userData) => ({
 	type: SET_CURRENT_USER,
 	payload: userData
+});
+
+// set loading state when sign in and sign up user
+export const setUserLoading = (loading) => ({
+	type: SET_USER_LOADING,
+	payload: loading
 });

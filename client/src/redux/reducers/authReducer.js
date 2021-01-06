@@ -1,9 +1,10 @@
-import { SET_CURRENT_USER } from '../constants/types';
+import { SET_CURRENT_USER, SET_USER_LOADING } from '../constants/types';
 import { isEmpty } from '../../utils/isEmpty';
 
 const initialState = {
 	isAuthenticated: false,
-	user: {}
+	user: {},
+	userLoading: false
 };
 
 const authReducer = (state = initialState, action) => {
@@ -13,6 +14,11 @@ const authReducer = (state = initialState, action) => {
 				...state,
 				isAuthenticated: !isEmpty(action.payload),
 				user: action.payload
+			};
+		case SET_USER_LOADING:
+			return {
+				...state,
+				userLoading: action.payload
 			};
 		default:
 			return state;
