@@ -1,6 +1,7 @@
-import { GET_USER_FEEDS } from '../constants/types';
+import { GET_USER_FEEDS, SET_FEEDS_LOADING } from '../constants/types';
 const initialState = {
-	records: {}
+	records: {},
+	feedsLoading: false
 };
 
 const feedReducer = (state = initialState, action) => {
@@ -9,6 +10,11 @@ const feedReducer = (state = initialState, action) => {
 			return {
 				...state,
 				records: action.payload
+			};
+		case SET_FEEDS_LOADING:
+			return {
+				...state,
+				feedsLoading: action.payload
 			};
 		default:
 			return state;

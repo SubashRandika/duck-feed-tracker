@@ -12,9 +12,10 @@ import FeedsTable from '../components/feeds/FeedsTable';
 
 const { TabPane } = Tabs;
 
-function Home({ auth, feeds, ui, getFeedsByUser }) {
+function Home({ auth, feeds, getFeedsByUser }) {
 	const { id, name } = auth.user;
-	const { feeds: feedData } = feeds.records;
+	const { feedsLoading, records } = feeds;
+	const { feeds: feedData } = records;
 	let feedsTabContent;
 
 	const handleNewFeedCreate = (e) => {
@@ -24,7 +25,7 @@ function Home({ auth, feeds, ui, getFeedsByUser }) {
 		console.log('New feed create action performed');
 	};
 
-	if (ui.loading) {
+	if (feedsLoading) {
 		feedsTabContent = (
 			<div className='spin__container'>
 				<Spin tip='Loading...' size='large' />
@@ -75,14 +76,12 @@ function Home({ auth, feeds, ui, getFeedsByUser }) {
 Home.propTypes = {
 	auth: PropTypes.object.isRequired,
 	feeds: PropTypes.object.isRequired,
-	ui: PropTypes.object.isRequired,
 	getFeedsByUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
-	feeds: state.feeds,
-	ui: state.ui
+	feeds: state.feeds
 });
 
 const mapDispatchToProps = (dispatch) => ({

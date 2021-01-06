@@ -1,13 +1,10 @@
 import axios from 'axios';
 import { showNotification } from '../../utils/showNotification';
-import { GET_USER_FEEDS, LOADING_UI } from '../constants/types';
+import { GET_USER_FEEDS, SET_FEEDS_LOADING } from '../constants/types';
 
 // get all the feeds of the signin user (authenticated user)
 export const getFeedsByUser = (userId) => (dispatch) => {
-	dispatch({
-		type: LOADING_UI,
-		payload: true
-	});
+	dispatch(setFeedsLoading(true));
 
 	axios
 		.get(`/api/feeds/${userId}`)
@@ -17,10 +14,7 @@ export const getFeedsByUser = (userId) => (dispatch) => {
 				payload: data
 			});
 
-			dispatch({
-				type: LOADING_UI,
-				payload: false
-			});
+			dispatch(setFeedsLoading(false));
 		})
 		.catch((err) => {
 			showNotification('Error', err.message, 'error');
@@ -29,5 +23,13 @@ export const getFeedsByUser = (userId) => (dispatch) => {
 				type: GET_USER_FEEDS,
 				payload: null
 			});
+
+			dispatch(setFeedsLoading(false));
 		});
 };
+
+// set loading redux state until user feeds are loading
+export const setFeedsLoading = (loading) => ({
+	type: SET_FEEDS_LOADING,
+	payload: loading
+});
